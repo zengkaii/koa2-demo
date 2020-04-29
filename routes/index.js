@@ -10,7 +10,6 @@ router.get('/string', async (ctx, next) => {
   ctx.body = {
     msg: 'string',
     data: {
-      
     },
     code: 0,
     success: true
