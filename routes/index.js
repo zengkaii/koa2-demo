@@ -6,7 +6,8 @@ router.get('/', async (ctx, next) => {
   })
 })
 
-router.get('/string', async (ctx, next) => {
+router.get('/string/all', async (ctx, next) => {
+  console.log('请求进来了')
   ctx.body = {
     msg: 'string',
     data: {
