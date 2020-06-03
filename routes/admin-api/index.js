@@ -1,4 +1,4 @@
-const {getRelust, postMethods, getByLimit} = require('../../utlis/methods.js')
+const {getRelust, postMethods, getByLimit, deleteMethod, updateMethod} = require('../../utlis/methods.js')
 const router = require('koa-router')()
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
@@ -38,7 +38,35 @@ router.get('/string/all', async (ctx, next) => {
 
 router.post('/post-test', async (ctx, next) => {
   console.log(ctx, 'post-test')
-  await postMethods('test', 'mycol2')
+  // await postMethod('test', 'mycol2')
+  ctx.status = 200
+  ctx.body = {
+    msg: 'post-test',
+    data: {
+      
+    },
+    code: 0,
+    success: true
+  }
+})
+router.post('/delete-test', async (ctx, next) => {
+  console.log(ctx, 'post-test')
+  await deleteMethod('test', 'mycol2', {"_id": "5ed752125fbc9902c4e5cf93"})
+  ctx.status = 200
+  ctx.body = {
+    msg: 'post-test',
+    data: {
+      
+    },
+    code: 0,
+    success: true
+  }
+})
+
+router.post('/update-test', async (ctx, next) => {
+  console.log(ctx, 'post-test')
+  await updateMethod('test', 'mycol2', {"name": "zzzz"}, {"url": "xxx"})
+  ctx.status = 200
   ctx.body = {
     msg: 'post-test',
     data: {
