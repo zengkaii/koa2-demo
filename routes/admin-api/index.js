@@ -13,10 +13,8 @@ router.get('/string/all', async (ctx, next) => {
     let request = ctx.request;
     let reqQuery = request.query;
     let req_queryString  = request.querystring;
-    console.log(url, 'url')
-    console.log(reqQuery, 'req_query')
-    console.log(req_queryString , 'req_queryString ')
     let result = await getByLimit('test', 'mycol2', reqQuery)
+    console.log(13, result)
     ctx.body = {
       msg: 'success',
       data: {
@@ -26,7 +24,7 @@ router.get('/string/all', async (ctx, next) => {
       success: true
     }
   } catch (error) {
-    console.log(error)
+    console.log('error', error)
     ctx.status = err && err.status || 500
     ctx.body = {
       msg: JSON.stringify(error),

@@ -6,7 +6,7 @@ function getRelust(dbName, collection, reqQuery={}) {
                 reject(err)
             }
             const dbase = db.db(dbName)
-            dbase.collection(collection). find(reqQuery).toArray(function(err, result) { // 返回集合中所有数据
+            dbase.collection(collection).find(reqQuery).toArray(function(err, result) { // 返回集合中所有数据
                 if (err) {
                     reject(err)
                 } else {
@@ -18,7 +18,7 @@ function getRelust(dbName, collection, reqQuery={}) {
     })
 }
 
-function getByLimit(dbName, collection, whereStr={}, currentPage = 1, pageSize = 10) {
+function getByLimit(dbName = 'tsAdmin', collection, whereStr={}, currentPage = 1, pageSize = 10) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
@@ -26,12 +26,13 @@ function getByLimit(dbName, collection, whereStr={}, currentPage = 1, pageSize =
             }
             const dbase = db.db(dbName)
             let skip = pageSize * (currentPage - 1)
+            delete whereStr.currentPage
+            delete whereStr.pageSize
             dbase.collection(collection).find(whereStr).skip(skip).limit(pageSize).toArray(function(err, result) {
                 if (err) {
                     reject(err)
                 } else {
                     resolve(result)
-                    console.log(result)
                     db.close();
                 }
           })
@@ -39,13 +40,14 @@ function getByLimit(dbName, collection, whereStr={}, currentPage = 1, pageSize =
     })
 }
 
-function postMethod(dbName, collection, postData={}) {
+function postMethod(dbName = 'tsAdmin', collection, postData={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
                 reject(err)
             }
             const dbase = db.db(dbName)
+            
             dbase.collection(collection).insertOne(postData, function(err, res) {
                 if (err) {
                     reject(err)
@@ -60,7 +62,7 @@ function postMethod(dbName, collection, postData={}) {
 }
 
 
-function postMultipleMethod(dbName, collection, postData=[]) {
+function postMultipleMethod(dbName = 'tsAdmin', collection, postData=[]) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
@@ -80,7 +82,7 @@ function postMultipleMethod(dbName, collection, postData=[]) {
     })
 }
 
-function updateMethod(dbName, collection, whereStr={}, updateStr={}) {
+function updateMethod(dbName = 'tsAdmin', collection, whereStr={}, updateStr={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
@@ -101,7 +103,7 @@ function updateMethod(dbName, collection, whereStr={}, updateStr={}) {
     })
 }
 
-function updateMultipleMethod(dbName, collection, whereStr={}, updateStr={}) {
+function updateMultipleMethod(dbName = 'tsAdmin', collection, whereStr={}, updateStr={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
@@ -122,7 +124,7 @@ function updateMultipleMethod(dbName, collection, whereStr={}, updateStr={}) {
     })
 }
 
-function deleteMethod(dbName, collection, whereStr={}) {
+function deleteMethod(dbName = 'tsAdmin', collection, whereStr={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
@@ -142,7 +144,7 @@ function deleteMethod(dbName, collection, whereStr={}) {
     })
 }
 
-function deleteMultipleMethod(dbName, collection, whereStr={}) {
+function deleteMultipleMethod(dbName = 'tsAdmin', collection, whereStr={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
             if (err) {
