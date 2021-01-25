@@ -1,4 +1,5 @@
 const {MongoClient, DB_URL} = require('./config')
+const ObjectId = require('mongodb').ObjectId;
 function getRelust(dbName, collection, reqQuery={}) {
     return new Promise((resolve, reject) => {
         MongoClient.connect(DB_URL, { useNewUrlParser: true }, function(err, db) {
@@ -89,8 +90,13 @@ function updateMethod(dbName = 'tsAdmin', collection, whereStr={}, updateStr={})
                 reject(err)
             }
             const dbase = db.db(dbName)
+            let params = JSON.parse(JSON.stringify(whereStr))
+            if(params.id) {
+                params._id = ObjectId(params.id)
+                delete params.id
+            }
             updateData = {$set: updateStr}
-            dbase.collection(collection).updateOne(whereStr, updateData, function(err, result) {
+            dbase.collection(collection).updateOne(params, updateData, function(err, result) {
                 if (err) {
                     reject(err)
                 } else {
@@ -131,9 +137,14 @@ function deleteMethod(dbName = 'tsAdmin', collection, whereStr={}) {
                 reject(err)
             }
             const dbase = db.db(dbName)
-            dbase.collection(collection).deleteOne(whereStr, function(err, res) {
-                if (err) {
-                    reject(err)
+            let params = JSON.parse(JSON.stringify(whereStr))
+            if(params.id) {
+                params._id = ObjectId(params.id)
+                delete params.id
+            }
+            dbase.collection(collection).deleteOne(params, function(err, res) {
+                if (err || res.deletedCount === 0) {
+                    reject(err || {msg:'删除失败'})
                 } else {
                     console.log("文档删除成功");
                     resolve()

@@ -42,7 +42,6 @@ router.get('/menuApi/menu/list', async (ctx, next) => {
 
 
 router.post('/menuApi/menu/save', async (ctx, next) => {
-    console.log('12312312312312313',ctx.request.body, '12312312312312313')
     try {
         await postMethod('tsAdmin', 'menuData', ctx.request.body)
         ctx.body = {
@@ -55,8 +54,28 @@ router.post('/menuApi/menu/save', async (ctx, next) => {
             code: 000000,
             success: false
         }
+    }
+})
+
+
+router.post('/menuApi/menu/delete', async (ctx, next) => {
+    try {
+        await deleteMethod('tsAdmin', 'menuData', ctx.request.body)
+        ctx.body = {
+            code: 99999,
+            success: true
+        }
+    } catch (error) {
+        ctx.body = {
+            msg: '删除失败',
+            code: 000000,
+            success: false
+        }
         console.log(error,123)
     }
 })
+
+
+
 
 module.exports = router
